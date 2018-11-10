@@ -36,6 +36,7 @@ const cleanUpTest = (groupName) => {
 const runTest = ({ group, template, command }) => {
   runningTests[group].commands[template] = command;
   return async () => {
+    const cwd = process.cwd();
     const dest = path.join(runningTests[group].tmpDir, template);
     mkdirp.sync(dest);
     process.chdir(dest);
@@ -43,6 +44,7 @@ const runTest = ({ group, template, command }) => {
     setExecutorOption('mock', true);
     await executeApp(runningTests[group].app, command.split(' '));
     resetExecutor();
+    process.chdir(cwd);
   };
 };
 
