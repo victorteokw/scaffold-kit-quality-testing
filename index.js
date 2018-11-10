@@ -49,7 +49,7 @@ const iterateFiles = (group, template, func) => {
   const temp = path.join(runningTests[group].templateDir, template);
   const files = glob.sync(
     path.join(temp, '**/*')).filter((f) => fs.lstatSync(f).isFile()
-  );
+  ).map((f) => path.relative(temp, f));
   files.forEach((filename) => {
     const tmp = path.join(runningTests[group].tmpDir, template);
     const expected = (filename) => fs.readFileSync(path.join(temp, filename)).toString();
