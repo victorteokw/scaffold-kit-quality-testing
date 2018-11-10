@@ -6,7 +6,7 @@ const mkdirp = require('mkdirp');
 const glob = require('glob');
 
 const { executeApp } = require('scaffold-kit/app');
-const { setExecutorOption } = require('scaffold-kit/executor');
+const { setExecutorOption, resetExecutor } = require('scaffold-kit/executor');
 
 const runningTests = {};
 
@@ -42,6 +42,7 @@ const runTest = ({ group, template, command }) => {
     setExecutorOption('silent', true);
     setExecutorOption('mock', true);
     await executeApp(runningTests[group].app, command.split(' '));
+    resetExecutor();
   };
 };
 
