@@ -50,7 +50,12 @@ const iterateFiles = (group, template, func) => {
   const files = glob.sync(
     path.join(temp, '**/*')).filter((f) => fs.lstatSync(f).isFile()
   );
-  files.map(func);
+  files.forEach((filename) => {
+    const tmp = path.join(runningTests[group].tmpDir, template);
+    const expected = () => fs.readFileSync(path.join(temp, filename)).toString();
+    const generated = () => fs.readFileSync(path.join(tmp, filename)).toString();
+    func({ filename, generated, expected });
+  });
 };
 
 const getDirectory = (group, template) => {
