@@ -41,7 +41,7 @@ const runTest = ({ group, template, command }) => {
     process.chdir(dest);
     setExecutorOption('silent', true);
     setExecutorOption('mock', true);
-    await executeApp(runningTests[group].app, `unused unused ${command}`.split(' '));
+    await executeApp(runningTests[group].app, `unused ${command}`.split(' '));
   };
 };
 
