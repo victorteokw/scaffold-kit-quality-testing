@@ -33,6 +33,14 @@ const cleanUpTest = (groupName) => {
   };
 };
 
+const splitCommand = (command) => {
+  if (Array.isArray(command)) {
+    return command;
+  } else {
+    return command.split(' ');
+  }
+};
+
 const runTest = ({ group, template, command }) => {
   runningTests[group].commands[template] = command;
   return async () => {
@@ -42,7 +50,7 @@ const runTest = ({ group, template, command }) => {
     process.chdir(dest);
     setExecutorOption('silent', true);
     setExecutorOption('mock', true);
-    await executeApp(runningTests[group].app, command.split(' '));
+    await executeApp(runningTests[group].app, splitCommand(command));
     resetExecutor();
     process.chdir(cwd);
   };
