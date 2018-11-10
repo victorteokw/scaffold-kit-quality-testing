@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
-const crypto = require(crypto);
+const crypto = require('crypto');
 const mkdirp = require('mkdirp');
 const glob = require('glob');
 
@@ -52,8 +52,8 @@ const iterateFiles = (group, template, func) => {
   );
   files.forEach((filename) => {
     const tmp = path.join(runningTests[group].tmpDir, template);
-    const expected = () => fs.readFileSync(path.join(temp, filename)).toString();
-    const generated = () => fs.readFileSync(path.join(tmp, filename)).toString();
+    const expected = (filename) => fs.readFileSync(path.join(temp, filename)).toString();
+    const generated = (filename) => fs.readFileSync(path.join(tmp, filename)).toString();
     func({ filename, generated, expected });
   });
 };
