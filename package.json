@@ -1,6 +1,6 @@
 {
   "name": "scaffold-kit-quality-testing",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unit test tools for scaffold kit projects.",
   "main": "index.js",
   "scripts": {

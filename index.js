@@ -10,7 +10,7 @@ const { setExecutorOption, resetExecutor } = require('scaffold-kit/executor');
 
 const runningTests = {};
 
-const setupTest = (groupName, app, templateDir) => {
+const setupTest = (groupName, app, templateDir, fixtureDir) => {
   const tmpDir = path.join(
     os.tmpdir(),
     crypto.randomBytes(16).toString('hex')
@@ -19,6 +19,7 @@ const setupTest = (groupName, app, templateDir) => {
     app,
     templateDir,
     tmpDir,
+    fixtureDir,
     commands: {}
   };
   return () => {
@@ -41,13 +42,17 @@ const splitCommand = (command) => {
   }
 };
 
-const runTest = ({ group, template, command }) => {
+const runTest = ({ group, template, command, fixture }) => {
   runningTests[group].commands[template] = command;
   return async () => {
     const cwd = process.cwd();
     const dest = path.join(runningTests[group].tmpDir, template);
     mkdirp.sync(dest);
     process.chdir(dest);
+    if (fixture) {
+      const fixtureLoc = path.join(runningTests[group].fixtureDir, fixture);
+      await fs.copy(fixtureLoc, dest);
+    }
     setExecutorOption('silent', true);
     setExecutorOption('mock', true);
     await executeApp(runningTests[group].app, splitCommand(command));
