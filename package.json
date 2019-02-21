@@ -1,6 +1,6 @@
 {
   "name": "scaffold-kit-quality-testing",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Unit test tools for scaffold kit projects.",
   "main": "index.js",
   "scripts": {
@@ -22,15 +22,17 @@
     "url": "https://github.com/zhangkaiyulw/scaffold-kit-quality-testing/issues"
   },
   "homepage": "https://github.com/zhangkaiyulw/scaffold-kit-quality-testing#readme",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "glob": "^7.1.3",
+    "mkdirp": "^0.5.1"
+  },
+  "peerDependencies": {
+    "scaffold-kit": "^0.1.9"
+  },
   "devDependencies": {
     "eslint": "^5.9.0",
     "eslint-config-man": "^1.0.4",
     "eslint-plugin-jest": "^22.0.0"
-  },
-  "dependencies": {
-    "fs-extra": "^7.0.1",
-    "glob": "^7.1.3",
-    "mkdirp": "^0.5.1",
-    "scaffold-kit": "^0.1.8"
   }
 }
