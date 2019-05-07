@@ -1,6 +1,6 @@
 {
   "name": "scaffold-kit-quality-testing",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Unit test tools for scaffold kit projects.",
   "main": "index.js",
   "scripts": {
@@ -28,11 +28,11 @@
     "mkdirp": "^0.5.1"
   },
   "peerDependencies": {
-    "scaffold-kit": "^1.0.3"
+    "scaffold-kit": "^1.0.4"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.16.0",
     "eslint-config-man": "^1.0.4",
-    "eslint-plugin-jest": "^22.0.0"
+    "eslint-plugin-jest": "^22.4.1"
   }
 }
