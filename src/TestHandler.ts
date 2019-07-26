@@ -4,8 +4,17 @@ import * as os from 'os';
 import * as crypto from 'crypto';
 import * as mkdirp from 'mkdirp';
 import * as glob from 'glob';
+import { uniq, concat } from 'lodash';
 import { execute, Executable } from 'scaffold-kit';
 import splitCommand from './splitCommand';
+
+interface IterateFileParameter {
+  message: string,
+  expected: string | null,
+  generated: () => string | null
+}
+
+type IterateFileCallback = (param: IterateFileParameter) => void;
 
 class TestHandler {
 
@@ -54,6 +63,55 @@ class TestHandler {
     this.executed = true;
   }
 
+  public iterateFiles = (callback: IterateFileCallback) => {
+    const expectedFiles = glob.sync(path.join(this.expectedDirectory, '**/*'), { dot: true })
+      .filter((f) => fs.lstatSync(f).isFile())
+      .map((f) => path.relative(this.expectedDirectory, f));
+    const fixtureFiles = !this.fixtureDirectory ? [] :
+      glob.sync(path.join(this.fixtureDirectory, '**/*'), { dot: true })
+        .filter((f) => fs.lstatSync(f).isFile())
+        .map((f) => path.relative(this.fixtureDirectory as string, f));
+    const fileList = uniq(concat(expectedFiles, fixtureFiles));
+    fileList.forEach((filename: string) => {
+      const expected = path.join(this.expectedDirectory, filename);
+      const fixture = !this.fixtureDirectory ? undefined :
+        path.join(this.fixtureDirectory, filename);
+      const generated = path.join(this.tempDirectory, filename);
+      const generatedContent = () =>
+        fs.existsSync(generated) ? fs.readFileSync(generated).toString() : null;
+      if (!fs.existsSync(expected)) {
+        callback({
+          message: `deletes file '${filename}'.`,
+          expected: null,
+          generated: generatedContent
+        });
+      } else {
+        const expectedContent = fs.readFileSync(expected).toString();
+        if (!fs.existsSync(fixture as fs.PathLike)) {
+          callback({
+            message: `creates file '${filename}'.`,
+            expected: expectedContent,
+            generated: generatedContent
+          });
+        } else {
+          const fixtureContent = fs.readFileSync(fixture as fs.PathLike).toString();
+          if (fixtureContent === expectedContent) {
+            callback({
+              message: `keeps file '${filename}'.`,
+              expected: expectedContent,
+              generated: generatedContent
+            });
+          } else {
+            callback({
+              message: `updates file '${filename}'.`,
+              expected: expectedContent,
+              generated: generatedContent
+            });
+          }
+        }
+      }
+    });
 
+  };
 
 }
