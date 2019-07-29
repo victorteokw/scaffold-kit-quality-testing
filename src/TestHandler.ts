@@ -5,7 +5,8 @@ import * as crypto from 'crypto';
 import * as mkdirp from 'mkdirp';
 import * as glob from 'glob';
 import { uniq, concat } from 'lodash';
-import { execute, Executable } from 'scaffold-kit';
+import { Context, execute, Executable } from 'scaffold-kit';
+import { silentReporter } from 'scaffold-kit/lib/reporters';
 import splitCommand from './splitCommand';
 
 interface IterateFileParameter {
@@ -54,9 +55,10 @@ class TestHandler {
       await fs.copy(this.fixtureDirectory, this.tempDirectory);
     }
 
-    // set mock
-    // set silent
-    await execute(this.executable, { wd: process.cwd(), args: this.command, options: {}});
+    const context = new Context({ wd: process.cwd(), args: this.command, options: {}});
+    context.mockInstall = true;
+    context.reporter = silentReporter;
+    await execute(this.executable, context);
 
     process.chdir(savedCwd);
 
@@ -115,3 +117,5 @@ class TestHandler {
   };
 
 }
+
+export default TestHandler;
