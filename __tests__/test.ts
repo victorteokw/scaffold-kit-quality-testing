@@ -22,7 +22,6 @@ describe('TestHandler', () => {
   });
 
   afterAll(async () => {
-    console.log(retval);
     await handler.destroy();
   });
 
@@ -57,7 +56,5 @@ describe('TestHandler', () => {
       generated: '2 is exist.\n'
     });
   });
-
-  console.log(retval);
 
 });
