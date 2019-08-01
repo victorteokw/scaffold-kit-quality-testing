@@ -5,7 +5,8 @@ import * as crypto from 'crypto';
 import * as mkdirp from 'mkdirp';
 import * as glob from 'glob';
 import { uniq, concat } from 'lodash';
-import { Context, execute, Executable } from 'scaffold-kit';
+import { Context, Executable } from 'scaffold-kit';
+import nullExecutable from 'scaffold-kit/lib/nullExecutable';
 import { silentReporter } from 'scaffold-kit/lib/reporters';
 import splitCommand from './splitCommand';
 
@@ -58,7 +59,7 @@ class TestHandler {
     const context = new Context({ wd: process.cwd(), args: this.command, options: {}});
     context.mockInstall = true;
     context.reporter = silentReporter;
-    await execute(this.executable, context);
+    await this.executable(context, nullExecutable);
 
     process.chdir(savedCwd);
 
