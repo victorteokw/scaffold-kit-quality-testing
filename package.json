@@ -34,7 +34,7 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "fs-extra": "^8.1.0",
+    "fs-extra": "^7.0.1",
     "glob": "^7.1.3",
     "mkdirp": "^0.5.1",
     "scaffold-kit": "^2.0.0-alpha.2"
